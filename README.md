@@ -115,6 +115,28 @@ Use this setting to set the width of the file header manually.
 git config --global diff-so-fancy.rulerWidth 80
 ```
 
+### hideTopRuler and hideBottomRuler
+
+By default, show both top & bottom horizontal ruler.
+
+```bash
+git config --bool --global diff-so-fancy.hideTopRuler    false
+git config --bool --global diff-so-fancy.hideBottomRuler false
+
+# __OR__ use the command line options to hide the ruler
+diff-so-fancy -U # hide top ruler, -U is short for --no-thr
+diff-so-fancy -D # hide bottom ruler, -D is short for --no-bhr
+
+# __OR__ use the command line options to show the ruler
+diff-so-fancy -u # show top ruler, -u is short for --show-thr
+diff-so-fancy -d # show bottom ruler, -d is short for --show-bhr
+```
+
+**NOTE** the priority (show)`-u/-d` > (hide)`-U/-D` > `hideTopRuler/hideBottomRuler`
+
+- if default config to **show**, it is easy to hide it use cmd args of `-U/-D`
+- if default config to **hide**, it is easy to show it use cmd args of `-u/-d`
+
 ### sectionChar
 
 By default, the section char is set to unicode wide char `◯`, If this is causing

@@ -23,6 +23,8 @@ my $change_hunk_indicators     = git_config_boolean("diff-so-fancy.changeHunkInd
 my $strip_leading_indicators   = git_config_boolean("diff-so-fancy.stripLeadingSymbols","true");
 my $mark_empty_lines           = git_config_boolean("diff-so-fancy.markEmptyLines","true");
 my $use_unicode_dash_for_ruler = git_config_boolean("diff-so-fancy.useUnicodeRuler","true");
+my $hide_top_ruler             = git_config_boolean("diff-so-fancy.hideTopRuler","false");
+my $hide_bot_ruler             = git_config_boolean("diff-so-fancy.hideBottomRuler","false");
 my $ruler_width                = git_config("diff-so-fancy.rulerWidth", undef);
 my $section_char               = git_config("diff-so-fancy.sectionChar", "◯  ");
 my $git_strip_prefix           = git_config_boolean("diff.noprefix","false");
@@ -47,6 +49,10 @@ my $in_hunk           = 0;
 my $columns_to_remove = 0;
 my $is_mercurial      = 0;
 my $color_forced      = 0; # Has the color been forced on/off
+
+# Default show top & bottom ruler
+my $show_top_ruler = 1;
+my $show_bot_ruler = 1;
 
 # We try and be smart about whether we need to do line coloring, but
 # this is an option to force it on/off
@@ -96,6 +102,38 @@ if ($args->{N} || $args->{'no-section-char'}) {
 	$section_char = '';
 } elsif ($args->{'use-sc'}) {
 	$section_char = $args->{'use-sc'};
+}
+
+# hide up/top horizontal ruler
+if ($args->{U} || $args->{'no-thr'} || $hide_top_ruler) {
+	$show_top_ruler = 0;
+}
+# hide down/bottom horizontal ruler
+if ($args->{D} || $args->{'no-bhr'} || $hide_bot_ruler) {
+	$show_bot_ruler = 0;
+}
+
+# show up/top horizontal ruler
+if ($args->{u} || $args->{'show-thr'}) {
+	$show_top_ruler = 1;
+}
+# show down/bottom horizontal ruler
+if ($args->{d} || $args->{'show-bhr'}) {
+	$show_bot_ruler = 1;
+}
+
+sub draw_top_ruler($) {
+	my ($ruler_color) = @_;
+	if ($show_top_ruler) {
+		print horizontal_rule($ruler_color);
+	}
+}
+
+sub draw_bot_ruler($) {
+	my ($ruler_color) = @_;
+	if ($show_bot_ruler) {
+		print horizontal_rule($ruler_color);
+	}
 }
 
 #################################################################################
@@ -198,9 +236,9 @@ sub do_dsf_stuff {
 			}
 
 			if ($file_1 && $file_2) {
-				print horizontal_rule($meta_color);
+				draw_top_ruler($meta_color);
 				print $meta_color . file_change_string($file_1,$file_2) . "\n";
-				print horizontal_rule($meta_color);
+				draw_bot_ruler($meta_color);
 			}
 		#########################
 		# Look for the filename #
@@ -255,7 +293,7 @@ sub do_dsf_stuff {
 
 			# Print out the top horizontal line of the header
 			print $reset_color;
-			print horizontal_rule($meta_color);
+			draw_top_ruler($meta_color);
 
 			# Mercurial coloring is slightly different so we need to hard reset colors
 			if ($is_mercurial) {
@@ -266,7 +304,7 @@ sub do_dsf_stuff {
 			print file_change_string($file_1,$file_2) . "\n";
 
 			# Print out the bottom horizontal line of the header
-			print horizontal_rule($meta_color);
+			draw_bot_ruler($meta_color);
 		########################################
 		# Check for "@@ -3,41 +3,63 @@" syntax #
 		########################################
@@ -337,9 +375,9 @@ sub do_dsf_stuff {
 		################################
 		} elsif ($line =~ /^Binary files (\w\/)?(.+?) and (\w\/)?(.+?) differ/) {
 			my $change = file_change_string($2,$4);
-			print horizontal_rule($meta_color);
+			draw_top_ruler($meta_color);
 			print "$meta_color$change (binary)\n";
-			print horizontal_rule($meta_color);
+			draw_bot_ruler($meta_color);
 		#####################################################
 		# Check if we're changing the permissions of a file #
 		#####################################################
@@ -383,9 +421,9 @@ sub do_dsf_stuff {
 
 				my $change = file_change_string($file1,$file2);
 
-				print horizontal_rule($meta_color);
+				draw_top_ruler($meta_color);
 				print $meta_color . $change . "\n";
-				print horizontal_rule($meta_color);
+				draw_bot_ruler($meta_color);
 			}
 
 			$i += 3; # We've consumed three lines
