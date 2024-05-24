@@ -54,6 +54,11 @@ my $color_forced      = 0; # Has the color been forced on/off
 my $show_top_ruler = 1;
 my $show_bot_ruler = 1;
 
+# The ruler is an empty newline, not dash
+my $ruler_is_newline_if_no_hide = 0;
+# The ruler is an empty newline only if it is to be hidden
+my $ruler_is_newline_hide_only = 1;
+
 # We try and be smart about whether we need to do line coloring, but
 # this is an option to force it on/off
 if ($args->{color_on}) {
@@ -122,17 +127,41 @@ if ($args->{d} || $args->{'show-bhr'}) {
 	$show_bot_ruler = 1;
 }
 
+if ($args->{x}) {
+	$ruler_is_newline_hide_only = 0;
+}
+
+if ($args->{X}) {
+	$ruler_is_newline_if_no_hide = 1;
+}
+
 sub draw_top_ruler($) {
 	my ($ruler_color) = @_;
 	if ($show_top_ruler) {
-		print horizontal_rule($ruler_color);
+		if ($ruler_is_newline_if_no_hide) {
+			print "\n";
+		} else {
+			print horizontal_rule($ruler_color);
+		}
+	} else {
+		if ($ruler_is_newline_hide_only) {
+			print "\n";
+		}
 	}
 }
 
 sub draw_bot_ruler($) {
 	my ($ruler_color) = @_;
 	if ($show_bot_ruler) {
-		print horizontal_rule($ruler_color);
+		if ($ruler_is_newline_if_no_hide) {
+			print "\n";
+		} else {
+			print horizontal_rule($ruler_color);
+		}
+	} else {
+		if ($ruler_is_newline_hide_only) {
+			print "\n";
+		}
 	}
 }
 
