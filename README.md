@@ -98,7 +98,9 @@ git config --bool --global diff-so-fancy.stripLeadingSymbols false
 
 ### useUnicodeRuler
 
-By default, the separator for the file header uses Unicode line-drawing characters. If this is causing output errors on your terminal, set this to `false` to use ASCII characters instead. (Default: true)
+By default, the separator for the file header uses Unicode line-drawing characters.
+If this is causing output errors on your terminal, set this to `false` to use
+ASCII characters instead. (Default: true)
 
 ```shell
 git config --bool --global diff-so-fancy.useUnicodeRuler false
@@ -106,11 +108,28 @@ git config --bool --global diff-so-fancy.useUnicodeRuler false
 
 ### rulerWidth
 
-By default, the separator for the file header spans the full width of the terminal. Use this setting to set the width of the file header manually.
+By default, the separator for the file header spans the full width of the terminal.
+Use this setting to set the width of the file header manually.
 
 ```shell
 git config --global diff-so-fancy.rulerWidth 80
 ```
+
+### sectionChar
+
+By default, the section char is set to unicode wide char `◯`, If this is causing
+output errors on your terminal, then you can reset it to other char or make it
+completely none.
+
+```bash
+git config --global diff-so-fancy.sectionChar ""   # set to none
+git config --global diff-so-fancy.sectionChar "DIFF" # set to DIFF
+# __OR__ use the command line options
+diff-so-fancy --use-sc "DIFF" # set to any chars you like
+diff-so-fancy -N # none, -N is short for --no-section-char
+```
+
+$section_char
 
 ## The diff-so-fancy team
 
