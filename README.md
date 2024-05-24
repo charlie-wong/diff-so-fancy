@@ -177,8 +177,6 @@ diff-so-fancy --use-sc "DIFF" # set to any chars you like
 diff-so-fancy -N # none, -N is short for --no-section-char
 ```
 
-$section_char
-
 ## The diff-so-fancy team
 
 | Person                | Role             |

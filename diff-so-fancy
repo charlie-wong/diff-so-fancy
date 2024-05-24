@@ -789,11 +789,29 @@ diff-so-fancy --colors                   # View the commands to set the recommen
 diff-so-fancy --set-defaults             # Configure git-diff to use diff-so-fancy and suggested colors
 diff-so-fancy --patch                    # Use diff-so-fancy in patch mode (interoperable with `git add --patch`)
 
+diff-so-fancy -N                         # No section-chars, default is ◯
+diff-so-fancy --use-sc 'DIFF'            # Customizing the section-chars
+
 # Configure git to use d-s-f for *all* diff operations
 git config --global core.pager \"diff-so-fancy | less --tabs=4 -RFX\"
 
 # Configure git to use d-s-f for `git add --patch`
-git config --global interactive.diffFilter \"diff-so-fancy --patch\"\n";
+git config --global interactive.diffFilter \"diff-so-fancy --patch\"
+
+More Ruler Control Arguments:
+
+By default, both top/bottom ruler is showing, and use Unicode line-drawing char.
+And the if ruler is hiding then replace it by newline flag is set ON by default.
+
+  -U  Mark the top ruler to hiding when drawing
+  -u  Mark the top ruler to showing when drawing
+  -D  Mark the bottom ruler to hiding when drawing
+  -d  Mark the bottom ruler to showing when drawing
+
+  -x  If ruler is marked hiding, then replace it by newline, default ON
+  -X  If ruler is marked showing, then replace it by newline, default OFF
+
+";
 
 	return $out;
 }
